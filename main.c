@@ -13,8 +13,7 @@ int main(int argc, char** argv){
 
   economy_status.available_cash = 1000000;
   economy_status.happiness = 50;
-
-  tax_sys.mid_res = 0.25;
+  init_tax_sys();
 
   POSITION demo;
   l_res = init_residential(demo,100,0,50);

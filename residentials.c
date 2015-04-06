@@ -1,3 +1,9 @@
+/*
+ * residentials.c - Residentials stuff
+ *
+ * Copyright (c) 2015 Paolo Niccolò Giubelli
+ *
+ */
 #include <stdlib.h>
 #include <string.h>
 #include "structs.h"
