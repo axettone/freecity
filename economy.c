@@ -32,8 +32,8 @@ int get_taxes(residentials* buildings){
 
 //Init tax system
 void init_tax_sys(){
-  tax_sys.low_red = 0.10;
-  tax_sys.mid_red = 0.25;
+  tax_sys.low_res = 0.10;
+  tax_sys.mid_res = 0.25;
   tax_sys.high_res = 0.40;
 
   tax_sys.low_com = 0.10;

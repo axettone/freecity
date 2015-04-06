@@ -15,6 +15,19 @@ typedef struct res_llist{
   RES_BUILDING bldng;
   struct residentials *next;
 } residentials;
+typedef enum schoolgrade { KINDER, ELEMENTARY, HIGH, COLLEGE, UNIVERSITY } schoolgrade_t;
+typedef struct school_t{
+  char name[80];
+  float funding;
+  schoolgrade_t grade;
+  unsigned short capacity;
+  unsigned short occupied;
+
+}school_t;
+typedef struct school_l{
+  school_t school;
+  struct school_l *next;
+} school_l;
 
 struct {
   long available_cash;
