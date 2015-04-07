@@ -47,19 +47,44 @@ int not_on_edge(short x, short y){
     return 0;
   return 1;
 }
+
+int matrix_sum_range(matrix_t* matr, short range, short x, short y){
+  int ret = 0;
+  int ii,jj;
+  for(ii=x-range;ii<x+range+1;ii++){
+    for(jj=y-range;jj<y+range+1;jj++){
+      if(not_on_edge(ii,jj)){
+        ret+=matr->m[MATRIX_W*jj+ii];
+      }
+    }
+  }
+  return ret;
+}
 int set_matrix_range_quadratic(matrix_t* matr, short range, int matr_op, uint8_t value, short x, short y){
   if(check_coords(matr,x,y) == 0){
     int ii,jj;
+    uint8_t tmp;
     for(ii=x-range;ii<x+range+1;ii++){
       for(jj=y-range;jj<y+range+1;jj++){
         if(not_on_edge(ii,jj)){
-          matr->m[MATRIX_W*jj+ii]=value-(sqrt(pow(x-ii,2)+pow(y-jj,2))); //works
+          tmp = value-(sqrt(pow(x-ii,2)+pow(y-jj,2))); //works
+          switch(matr_op){
+            case MATR_SUB:
+              tmp*=-1;
+            case MATR_ADD:
+              matr->m[MATRIX_W*jj+ii]+=tmp;
+              break;
+            case MATR_MUL:
+              matr->m[MATRIX_W*jj+ii]*=tmp;
+              break;
+          }     
         } else {
           continue;
         }
       }
     }
   } 
+  return 0; //WTF?
 }
 
 void print_matrix(matrix_t* matr){

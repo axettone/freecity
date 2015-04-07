@@ -17,9 +17,7 @@ int check_coords(matrix_t* matr, short x,short y);
 matrix_t *init_matrix(const char* matr_name);
 uint8_t read_value_from_matrix(matrix_t* matr,short x,short y);
 int set_matrix_range_quadratic(matrix_t* matr, short range, int matr_op, uint8_t value, short x, short y);
-/**
- * For debug purposes only
- */
-void print_matrix(matrix_t* matr);
+void print_matrix(matrix_t* matr); //for debug purposes only
 int not_on_edge(short x, short y);
+int matrix_sum_range(matrix_t* matr, short range, short x, short y);
 #endif

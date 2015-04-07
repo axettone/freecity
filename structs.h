@@ -10,6 +10,7 @@ typedef struct res_building{
   unsigned short capacity;
   unsigned short occupied;
   unsigned short wealth;
+  unsigned short happiness;
 } RES_BUILDING;
 
 typedef struct res_llist{
