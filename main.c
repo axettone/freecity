@@ -33,7 +33,10 @@ int main(int argc, char** argv){
   schools->next = NULL;
 
   matrix_t *pollution = init_matrix("Pollution matrix");
-  printf("Our first matrix is: %s\n", pollution->name); 
+  printf("Our first matrix is: %s\n", pollution->name);
+  print_matrix(pollution);
+  set_matrix_range_quadratic(pollution,5,MATR_ADD,10,25,0);
+  print_matrix(pollution);
   printf("Pollution value in [10,15]: %d\n", read_value_from_matrix(pollution,10,15));
   printf("Population: %ld\n", count_population(l_res));
   printf("Got taxes: %d\n", get_taxes(l_res));

@@ -1,6 +1,6 @@
 all: freecity
-freecity: main.o residentials.o economy.o school.c matrixsys.c 
-	gcc -o freecity main.o residentials.o economy.o school.c matrixsys.c
+freecity: main.o residentials.o economy.o school.o matrixsys.o
+	gcc -o freecity main.o residentials.o economy.o school.c matrixsys.o -lm
 matrixsys.o: matrixsys.c
 	gcc -c matrixsys.c
 school.o: school.c
