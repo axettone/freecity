@@ -1,5 +1,6 @@
 #ifndef STRUCTS_H
 #define STRUCTS_H
+#include <inttypes.h>
 typedef struct geo_pos{
   int x,y,z;
 } POSITION;
@@ -29,6 +30,10 @@ typedef struct school_l{
   struct school_l *next;
 } school_l;
 
+typedef struct matrix_t{
+  char name[80]; //Not sure is useful
+  uint8_t *m; //The real matrix
+} matrix_t;
 struct {
   long available_cash;
   int happiness;

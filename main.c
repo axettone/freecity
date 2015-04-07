@@ -4,6 +4,7 @@
 #include "residentials.h"
 #include "economy.h"
 #include "school.h"
+#include "matrixsys.h"
 
 #define DEBUG 1
 
@@ -30,6 +31,10 @@ int main(int argc, char** argv){
   schools->school.grade = ELEMENTARY;
   strncpy(schools->school.name,"Enrico Fermi",80);
   schools->next = NULL;
+
+  matrix_t *pollution = init_matrix("Pollution matrix");
+  printf("Our first matrix is: %s\n", pollution->name); 
+  printf("Pollution value in [10,15]: %d\n", read_value_from_matrix(pollution,10,15));
   printf("Population: %ld\n", count_population(l_res));
   printf("Got taxes: %d\n", get_taxes(l_res));
   school_overall_cost(schools);

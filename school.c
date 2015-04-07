@@ -1,3 +1,8 @@
+/*
+ * school.c - Let's handle educational stuff
+ *
+ * Copyright (C) 2015 Paolo Niccolò Giubelli
+ */
 #include <stdio.h>
 #include <stdlib.h>
 #include "school.h"
