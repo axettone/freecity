@@ -41,6 +41,12 @@ int main(int argc, char** argv){
   printf("Pollution value in [10,15]: %d\n", read_value_from_matrix(pollution,10,15));
   printf("Population: %ld\n", count_population(l_res));
   printf("Got taxes: %d\n", get_taxes(l_res));
+
+  ordinances.PERMIT_GAMBLING = true;
+  int balance = 0;
+  apply_ordinances(&balance,ordinances);
+  printf("Balance: %d\n",balance);
+
   school_overall_cost(schools);
   return 0;
 }
