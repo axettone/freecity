@@ -26,6 +26,20 @@ typedef struct school_t{
   unsigned short occupied;
 
 }school_t;
+
+struct hospital_t{
+  char name[80];
+  float funding;
+  unsigned short capacity;
+  unsigned short occupied;
+};
+
+struct police_station{
+  float funding;
+  unsigned short agents;
+  unsigned short inmates;
+};
+
 typedef struct school_l{
   school_t school;
   struct school_l *next;
