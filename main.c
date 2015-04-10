@@ -1,11 +1,14 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include "structs.h"
 #include "residentials.h"
 #include "economy.h"
 #include "school.h"
 #include "matrixsys.h"
 #include "ordinances.h"
+#include "menu.h"
+#include "map.h"
 
 #define DEBUG 1
 
@@ -13,7 +16,8 @@ int main(int argc, char** argv){
   int ii;
   residentials *l_res;
   school_l *schools;
-
+  struct map the_map;
+  init_map(&the_map,100,100);  
   economy_status.available_cash = 1000000;
   economy_status.happiness = 50;
   init_tax_sys();
@@ -48,5 +52,31 @@ int main(int argc, char** argv){
   printf("Balance: %d\n",balance);
 
   school_overall_cost(schools);
+
+  //Manual loop. This should be replaced one day
+  //with a GUI and a thread
+
+  while(1){
+    int ch = menu();
+    if(ch==MN_EXIT)
+      break;
+    switch(ch){
+      case MN_BUDGET:
+        menu_print_budget_data();
+        break;
+      case MN_ORDINANCES:
+        menu_print_ordinances_data();
+        break;
+      case MN_SCHOOL:
+        menu_print_school_data(schools);
+        break;
+      case MN_CRIME:
+        menu_print_crime_data();
+        break;
+      default:
+        menu_error();
+        break;
+    }
+  }
   return 0;
 }
