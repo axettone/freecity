@@ -47,6 +47,8 @@ typedef struct school_l{
 
 typedef struct matrix_t{
   char name[80]; //Not sure is useful
+  short width;
+  short height;
   uint8_t *m; //The real matrix
 } matrix_t;
 struct {
