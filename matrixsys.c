@@ -16,15 +16,15 @@
 #include "map.h"
 #include "matrixsys.h"
 
-int check_coords(matrix_t* matr, short x,short y){
+int check_coords(struct matrix_t* matr, short x,short y){
   if(x>matr->width || x<0 || y<0 || y>matr->height)
     return INVALID_COORDS;
   return 0;
 }
 
 
-matrix_t *init_matrix(const char* name,short width,short height){
-  matrix_t *ret = (matrix_t*)malloc(sizeof(matrix_t));
+struct matrix_t *init_matrix(const char* name,short width,short height){
+  struct matrix_t *ret = (struct matrix_t*)malloc(sizeof(struct matrix_t));
   strncpy(ret->name,name,80);
   ret->m = (uint8_t*)malloc(sizeof(uint8_t)*width*height);
   ret->width=width;
@@ -33,25 +33,25 @@ matrix_t *init_matrix(const char* name,short width,short height){
   return ret;
 }
 
-uint8_t read_value_from_matrix(matrix_t* matr,short x,short y){
+uint8_t read_value_from_matrix(struct matrix_t* matr,short x,short y){
   if(check_coords(matr,x,y) == 0){
     return matr->m[matr->width*y+x];
   }
 }
 
-uint8_t set_value_in_matrix(matrix_t* matr, uint8_t val, short x, short y){
+uint8_t set_value_in_matrix(struct matrix_t* matr, uint8_t val, short x, short y){
   if(check_coords(matr,x,y)==0){
     matr->m[matr->width*y+x] = val;
   }
 }
 
-int not_on_edge(matrix_t* matr,short x, short y){
+int not_on_edge(struct matrix_t* matr,short x, short y){
   if(x==0||x==matr->width-1||y==0||y==matr->height-1)
     return 0;
   return 1;
 }
 
-int matrix_sum_range(matrix_t* matr, short range, short x, short y){
+int matrix_sum_range(struct matrix_t* matr, short range, short x, short y){
   int ret = 0;
   int ii,jj;
   for(ii=y-range;ii<y+range+1;ii++){
@@ -63,7 +63,7 @@ int matrix_sum_range(matrix_t* matr, short range, short x, short y){
   }
   return ret;
 }
-int set_matrix_range_quadratic(matrix_t* matr, short range, int matr_op, uint8_t value, short x, short y){
+int set_matrix_range_quadratic(struct matrix_t* matr, short range, int matr_op, uint8_t value, short x, short y){
   if(check_coords(matr,x,y) == 0){
     int ii,jj;
     uint8_t tmp;
@@ -90,7 +90,7 @@ int set_matrix_range_quadratic(matrix_t* matr, short range, int matr_op, uint8_t
   return 0; //WTF?
 }
 
-void print_matrix(matrix_t* matr){
+void print_matrix(struct matrix_t* matr){
   int ii,jj;
   for(ii=0;ii<matr->width;ii++){
     for(jj=0;jj<matr->height;jj++){

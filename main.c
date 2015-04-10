@@ -15,7 +15,7 @@
 int main(int argc, char** argv){
   int ii,jj;
   residentials *l_res;
-  school_l *schools;
+  struct school_l *schools;
   struct map the_map;
   init_map(&the_map,100,100);  
   economy_status.available_cash = 1000000;
@@ -29,7 +29,7 @@ int main(int argc, char** argv){
    l_res->next = init_residential(demo,100,ii,50);
    l_res = l_res->next;
   }
-  schools = (school_l*)malloc(sizeof(school_l)*2);
+  schools = (struct school_l*)malloc(sizeof(struct school_l)*2);
   schools[0].school.funding = 1.0;
   schools[0].school.occupied = 90;
   schools[0].school.capacity = 150;
@@ -40,15 +40,22 @@ int main(int argc, char** argv){
   schools[1].school.capacity = 100;
   schools[1].school.grade = ELEMENTARY;
 
-  if(put_on_map(&schools->school,&the_map,50,50,3)==MAP_POS_OCC){
+  struct map_item sch1,sch2;
+  sch1.item_type = I_SCHOOL;
+  sch2.item_type = I_SCHOOL;
+
+  sch1.item = &schools[0];
+  sch2.item = &schools[1];
+  if(put_on_map(&sch1,&the_map,50,50,3)==MAP_POS_OCC){
     printf("I can't put that school here, map is occupied\n");
   }
-  if(put_on_map(&schools[1].school,&the_map,50,53,3) == MAP_POS_OCC){
+  if(put_on_map(&sch2,&the_map,50,53,3) == MAP_POS_OCC){
     printf("I can't put that school here, map is occupied\n");
   }
   strncpy(schools[0].school.name,"Enrico Fermi",80);
   strncpy(schools[1].school.name,"Albert Einstein",80);
-  schools->next = NULL;
+  schools[0].next = &schools[1];
+  schools[1].next = NULL;
 
   /*
   for(ii=0;ii<the_map.width;ii++){
@@ -61,7 +68,7 @@ int main(int argc, char** argv){
     }
   }*/
 
-  matrix_t *pollution = init_matrix("Pollution matrix",the_map.width,the_map.height);
+  struct matrix_t *pollution = init_matrix("Pollution matrix",the_map.width,the_map.height);
   printf("Our first matrix is: %s\n", pollution->name);
   //print_matrix(pollution);
   set_matrix_range_quadratic(pollution,5,MATR_ADD,10,25,0);

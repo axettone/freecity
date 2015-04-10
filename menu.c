@@ -18,7 +18,7 @@ void menu_print_budget_data(){
 }
 void menu_print_ordinances_data(){
 }
-void menu_print_school_data(school_l* s){
+void menu_print_school_data(struct school_l* s){
   while(1){
     printf("School %s: %d students on %d (%.2f)\n",s->school.name,s->school.occupied,s->school.capacity,s->school.occupied/(float)s->school.capacity);
     if(s->next == NULL)

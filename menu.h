@@ -13,6 +13,6 @@ void menu_error();
 
 void menu_print_budget_data();
 void menu_print_ordinances_data();
-void menu_print_school_data(school_l* schools);
+void menu_print_school_data(struct school_l* schools);
 void menu_print_crime_data();
 #endif

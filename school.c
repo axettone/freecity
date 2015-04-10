@@ -8,7 +8,7 @@
 #include "school.h"
 #include "structs.h"
 
-int school_overall_cost(school_l* schools){
+int school_overall_cost(struct school_l* schools){
   int ret = 0;
 
   while(1){
