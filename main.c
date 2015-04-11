@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "structs.h"
+#include "city.h"
 #include "residentials.h"
 #include "economy.h"
 #include "school.h"
@@ -10,16 +11,27 @@
 #include "menu.h"
 #include "map.h"
 #include "xmalloc.h"
+#include "power.h"
 
 #define DEBUG 1
 
 int main(int argc, char** argv){
+	struct city the_city;
+	printf("City name: ");
+	fgets(the_city.name,80,stdin);
+	printf("File name: ");
+	fgets(the_city.filename,256,stdin);
+	
+	printf("Ok the city name is %s and it will be saved in %s\n",
+			the_city.name,the_city.filename);
 	int ii,jj;
   
 	struct school_l *schools;
 	struct map *the_map = init_map(100,100);  
-	economy_status.available_cash = 1000000;
-	economy_status.happiness = 50;
+	the_city.the_map = the_map;
+	the_city.e_status = (struct economy_status*)xmalloc(sizeof(struct economy_status));
+	the_city.e_status->available_cash = 1000000;
+	the_city.e_status->happiness = 50;
 	init_tax_sys(); //this is crap
 	struct city_buildings *all_buildings; //wow 
 	//POSITION demo;
@@ -34,6 +46,8 @@ int main(int argc, char** argv){
 	all_buildings->next->building = init_residential(20,20,50,24,30);
 	//List termination
 	all_buildings->next->next = NULL;
+
+	the_city.all_buildings = all_buildings;
 
   schools = (struct school_l*)malloc(sizeof(struct school_l)*2);
   schools[0].school.funding = 1.0;
@@ -52,10 +66,10 @@ int main(int argc, char** argv){
 
   sch1.item = &schools[0];
   sch2.item = &schools[1];
-  if(put_on_map(&sch1,the_map,50,50,3)==MAP_POS_OCC){
+  if(put_on_map(&sch1,the_city.the_map,50,50,3)==MAP_POS_OCC){
     printf("I can't put that school here, map is occupied\n");
   }
-  if(put_on_map(&sch2,the_map,50,53,3) == MAP_POS_OCC){
+  if(put_on_map(&sch2,the_city.the_map,50,53,3) == MAP_POS_OCC){
     printf("I can't put that school here, map is occupied\n");
   }
   strncpy(schools[0].school.name,"Enrico Fermi",80);
@@ -74,7 +88,7 @@ int main(int argc, char** argv){
     }
   }*/
 
-  struct matrix_t *pollution = init_matrix("Pollution matrix",the_map->width,the_map->height);
+  struct matrix_t *pollution = init_matrix("Pollution matrix",the_city.the_map->width,the_map->height);
   printf("Our first matrix is: %s\n", pollution->name);
   //print_matrix(pollution);
   set_matrix_range_quadratic(pollution,5,MATR_ADD,10,25,0);
@@ -110,6 +124,9 @@ int main(int argc, char** argv){
       case MN_CRIME:
         menu_print_crime_data();
         break;
+	case MN_SAVE:
+	menu_save_city(&the_city);
+	break;
       default:
         menu_error();
         break;

@@ -7,6 +7,7 @@
 #define I_RESIDENTIAL 3
 #define I_INDUSTRIAL 4
 
+//building types
 #define BLD_RESIDENTIAL 1
 #define BLD_COMMERCIAL 2
 #define BLD_INDUSTRIAL 3
@@ -18,6 +19,7 @@
 typedef struct geo_pos{
   int x,y,z;
 } POSITION __attribute__ ((deprecated));
+
 
 struct building {
 	uint8_t x,y;
@@ -103,11 +105,11 @@ struct map_item{
   void *item;
 };
 
-struct {
+struct economy_status {
   long available_cash;
   int happiness;
 
-} economy_status;
+};
 
 struct {
   float low_res,mid_res,high_res;

@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "storage.h"
 #include "menu.h"
 
 int menu(){
@@ -8,6 +9,7 @@ int menu(){
   printf("2) Print ordinances data\n");
   printf("3) Print schools data\n");
   printf("4) Print crime data\n");
+  printf("5) Save city\n");
   printf("0) Exit\n");
   printf("Freecity>> ");
   scanf("%d",&choice);
@@ -20,7 +22,9 @@ void menu_print_ordinances_data(){
 }
 void menu_print_school_data(struct school_l* s){
   while(1){
-    printf("School %s: %d students on %d (%.2f)\n",s->school.name,s->school.occupied,s->school.capacity,s->school.occupied/(float)s->school.capacity);
+    printf("School %s: %d students on %d (%.2f)\n",s->school.name,
+		    s->school.occupied,s->school.capacity,
+		    s->school.occupied/(float)s->school.capacity);
     if(s->next == NULL)
       break;
     s = s->next;
@@ -28,7 +32,9 @@ void menu_print_school_data(struct school_l* s){
 }
 void menu_print_crime_data(){
 }
-
+void menu_save_city(struct city *the_city){
+	save_city(the_city);
+}
 void menu_error(){
   printf("Wrong choice!\n");
 }
