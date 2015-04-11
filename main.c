@@ -9,26 +9,32 @@
 #include "ordinances.h"
 #include "menu.h"
 #include "map.h"
+#include "xmalloc.h"
 
 #define DEBUG 1
 
 int main(int argc, char** argv){
-  int ii,jj;
-  residentials *l_res;
-  struct school_l *schools;
-  struct map the_map;
-  init_map(&the_map,100,100);  
-  economy_status.available_cash = 1000000;
-  economy_status.happiness = 50;
-  init_tax_sys();
+	int ii,jj;
+  
+	struct school_l *schools;
+	struct map *the_map = init_map(100,100);  
+	economy_status.available_cash = 1000000;
+	economy_status.happiness = 50;
+	init_tax_sys(); //this is crap
+	struct city_buildings *all_buildings; //wow 
+	//POSITION demo;
+	
+	//Let's create a pair of residential building
+	all_buildings = (struct city_buildings*)
+		xmalloc(sizeof(struct city_buildings));
 
-  POSITION demo;
-  l_res = init_residential(demo,100,0,50);
-  l_res->next = NULL;
-  for(ii=1;ii<100;ii++){
-   l_res->next = init_residential(demo,100,ii,50);
-   l_res = l_res->next;
-  }
+	all_buildings->building = init_residential(10,10,10,6,50);
+	all_buildings->next = (struct city_buildings*)
+		xmalloc(sizeof(struct city_buildings));
+	all_buildings->next->building = init_residential(20,20,50,24,30);
+	//List termination
+	all_buildings->next->next = NULL;
+
   schools = (struct school_l*)malloc(sizeof(struct school_l)*2);
   schools[0].school.funding = 1.0;
   schools[0].school.occupied = 90;
@@ -46,10 +52,10 @@ int main(int argc, char** argv){
 
   sch1.item = &schools[0];
   sch2.item = &schools[1];
-  if(put_on_map(&sch1,&the_map,50,50,3)==MAP_POS_OCC){
+  if(put_on_map(&sch1,the_map,50,50,3)==MAP_POS_OCC){
     printf("I can't put that school here, map is occupied\n");
   }
-  if(put_on_map(&sch2,&the_map,50,53,3) == MAP_POS_OCC){
+  if(put_on_map(&sch2,the_map,50,53,3) == MAP_POS_OCC){
     printf("I can't put that school here, map is occupied\n");
   }
   strncpy(schools[0].school.name,"Enrico Fermi",80);
@@ -68,14 +74,14 @@ int main(int argc, char** argv){
     }
   }*/
 
-  struct matrix_t *pollution = init_matrix("Pollution matrix",the_map.width,the_map.height);
+  struct matrix_t *pollution = init_matrix("Pollution matrix",the_map->width,the_map->height);
   printf("Our first matrix is: %s\n", pollution->name);
   //print_matrix(pollution);
   set_matrix_range_quadratic(pollution,5,MATR_ADD,10,25,0);
   print_matrix(pollution);
   printf("Pollution value in [10,15]: %d\n", read_value_from_matrix(pollution,10,15));
-  printf("Population: %ld\n", count_population(l_res));
-  printf("Got taxes: %d\n", get_taxes(l_res));
+  printf("Population: %ld\n", count_population(all_buildings));
+  //printf("Got taxes: %d\n", get_taxes(l_res));
 
   ordinances.PERMIT_GAMBLING = true;
   int balance = 0;

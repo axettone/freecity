@@ -20,6 +20,6 @@ struct map{
   struct map_item** items;
 };
 
-struct map* init_map(struct map *the_map,short width,short height);
+struct map* init_map(short width,short height);
 int put_on_map(struct map_item* item,struct map* the_map,short x,short y,short side_size);
 #endif

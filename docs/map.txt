@@ -1,0 +1,12 @@
+Map
+
+The map is an abstraction of a real map, and has nothing to do with the graphic
+map.
+
+The "map" structure is located into map.h, and it's pretty straightforward
+(height, width, items).
+
+This design makes possible to access directly to map_item structures, who are
+generic pointers to actual buildings and things.
+
+

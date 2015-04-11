@@ -1,7 +1,8 @@
 #ifndef RESIDENTIALS_H
 #define RESIDENTIALS_H
 #include "structs.h"
-residentials* init_residential(POSITION pos, unsigned short c, unsigned short o, unsigned short w);
+struct building* init_residential(uint8_t x,uint8_t y, unsigned short capacity,
+	       	unsigned short occupied, unsigned short wealth);
 
-long count_population(residentials* buildings);
+long count_population(struct city_buildings* buildings);
 #endif
