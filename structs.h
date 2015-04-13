@@ -1,7 +1,7 @@
 #ifndef STRUCTS_H
 #define STRUCTS_H
 #include <inttypes.h>
-
+#include <time.h>
 #define I_SCHOOL 1
 #define I_POLICE 2
 #define I_RESIDENTIAL 3

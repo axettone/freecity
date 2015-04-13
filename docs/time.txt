@@ -1,0 +1,24 @@
+How does the main loop work?
+
+The simulation starts at EPOCH (time_t = 0) that corresponds to 1/1/1970. This
+date is very important in the IT world and it's full of meanings.
+
+The current time is stored inside the city structure (the_time). The time is
+set to 0 at the beginning ad it's increased during the simulation.
+
+On each simulation loop, the simulator does:
+
+1) evaluate economy attractiveness
+2) make people migrations (in/out)
+3) check power and water grids (integrity, consumption, costs)
+4) evaluate economy
+5) gather taxes
+6) apply ordinances
+7) evaluate government (hospitals, schools, ...)
+8) autosave
+9) update date
+
+Every day has 24*60*60=86400 seconds, so we add 86400 to the city time on
+every loop. This makes possible to use gmtime() and strftime() to convert
+the time_t counter to an actual date by using standard c functions (defined
+into time.h).
