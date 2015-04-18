@@ -8,13 +8,13 @@
 #include <string.h>
 #include "structs.h"
 #include "residentials.h"
-struct building* init_residential(uint8_t x,uint8_t y, unsigned short capacity,
+struct building* init_residential(unsigned short x,unsigned short y, unsigned short size, unsigned short capacity,
 	       	unsigned short occupied, unsigned short wealth){
   struct building* ret = (struct building*)xmalloc(sizeof(struct building));
   ret->x=x;
   ret->y=y;
   ret->type = BLD_RESIDENTIAL;
-  ret->side_size = 2; //Maybe base this on capacity
+  ret->side_size = size;
   ret->item = (struct residential*)xmalloc(sizeof(struct residential));
   struct residential* r = (struct residential*)ret->item;
   r->capacity = capacity;
@@ -36,4 +36,7 @@ long count_population(struct city_buildings* buildings){
     }
   }
   return ret;
+}
+void people_migration(){
+	printf("Computing people migrations\n");
 }

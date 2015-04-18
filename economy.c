@@ -63,5 +63,5 @@ void init_tax_sys(){
 }
 
 void attractiveness_compute(struct attractiveness* attr){
-	
+	printf("Evaluating attractiveness\n");	
 }

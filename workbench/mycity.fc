@@ -1,0 +1,5 @@
+#This is a comment
+resid(0,0,3,100)
+resid(3,0,3,100)
+resid(6,0,3,100)
+resid(9,9,3,100)

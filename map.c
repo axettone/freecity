@@ -26,7 +26,7 @@
 #include "structs.h"
 #include "xmalloc.h"
 
-struct map* init_map(short width,short height){
+struct map* init_map(unsigned short width,unsigned short height){
 	struct map* the_map = (struct map*)xmalloc(sizeof(struct map));
 	the_map->width = width;
 	the_map->height = height;

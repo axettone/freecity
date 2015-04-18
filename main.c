@@ -39,12 +39,14 @@
 
 #define DEBUG 1
 
+struct attractiveness attractiveness;
+
 int main(int argc, char** argv){
 	struct city the_city;
 	printf("City name: ");
-	fgets(the_city.name,80,stdin);
+	fgets(the_city.name,CITY_NAME_MAXLEN,stdin);
 	printf("File name: ");
-	fgets(the_city.filename,256,stdin);
+	fgets(the_city.filename,CITY_FILENAME_MAXLEN,stdin);
 	
 	printf("Ok the city name is %s and it will be saved in %s\n",
 			the_city.name,the_city.filename);
@@ -53,7 +55,8 @@ int main(int argc, char** argv){
 	struct school_l *schools;
 	struct map *the_map = init_map(100,100);  
 	the_city.the_map = the_map;
-	the_city.e_status = (struct economy_status*)xmalloc(sizeof(struct economy_status));
+	the_city.e_status = (struct economy_status*)
+		xmalloc(sizeof(struct economy_status));
 	the_city.e_status->available_cash = 1000000;
 	the_city.e_status->happiness = 50;
 	init_tax_sys(); //this is crap
@@ -64,10 +67,10 @@ int main(int argc, char** argv){
 	all_buildings = (struct city_buildings*)
 		xmalloc(sizeof(struct city_buildings));
 
-	all_buildings->building = init_residential(10,10,10,6,50);
+	all_buildings->building = init_residential(10,10,3,10,6,50);
 	all_buildings->next = (struct city_buildings*)
 		xmalloc(sizeof(struct city_buildings));
-	all_buildings->next->building = init_residential(20,20,50,24,30);
+	all_buildings->next->building = init_residential(20,20,3,50,24,30);
 	//List termination
 	all_buildings->next->next = NULL;
 
@@ -155,6 +158,18 @@ int main(int argc, char** argv){
         menu_error();
         break;
     }
+  }
+  return 0;
+  while(1){
+	attractiveness_compute(&attractiveness);
+	people_migration();
+	check_power_grid();
+	evaluate_economy();
+	//gather_taxes();
+	//apply_ordinances();
+	evaluate_government();
+	autosave();
+	advance_date();
   }
   return 0;
 }

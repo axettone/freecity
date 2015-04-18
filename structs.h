@@ -22,7 +22,7 @@ typedef struct geo_pos{
 
 
 struct building {
-	uint8_t x,y;
+	unsigned short x,y;
 	unsigned short side_size;
 	unsigned short type;
 	void* item;

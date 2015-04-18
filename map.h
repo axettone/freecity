@@ -15,11 +15,11 @@
 #include "map.h"
 
 struct map{
-  short width;
-  short height;
+  unsigned short width;
+  unsigned short height;
   struct map_item** items;
 };
 
-struct map* init_map(short width,short height);
+struct map* init_map(unsigned short width, unsigned short height);
 int put_on_map(struct map_item* item,struct map* the_map,short x,short y,short side_size);
 #endif
