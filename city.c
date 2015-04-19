@@ -36,21 +36,33 @@ struct city* init_city(const char* city_name,
 	the_city->now_time = 0;
 	the_city->e_status = 
 		(struct economy_status*) xmalloc(sizeof(struct economy_status));
-	the_city->all_buildings = 
-		(struct city_buildings*)xmalloc(sizeof(struct city_buildings));
-	the_city->all_buildings->building = NULL;
-	the_city->all_buildings->next = NULL;
+	the_city->all_buildings = NULL; 
+//		(struct city_buildings*)xmalloc(sizeof(struct city_buildings));
+//	the_city->all_buildings->building = NULL;
+//	the_city->all_buildings->next = NULL;
 	
 	return the_city;
 }
 void append_building(struct city* c, struct building* b)
 {
 	struct city_buildings* cb = c->all_buildings;
+	struct city_buildings* bkp = cb;
 	while(cb != NULL){
+		bkp=cb;
 		cb = cb->next;
 	}
-	cb = 
-		(struct city_buildings*)xmalloc(sizeof(struct city_buildings));
+	if(cb == c->all_buildings){
+		//This is the first building
+		c->all_buildings = 
+			(struct city_buildings*)xmalloc(
+					sizeof(struct city_buildings));
+		
+		cb = c->all_buildings;
+	} else { 
+		//There's at least one building
+		cb = (struct city_buildings*)xmalloc(sizeof(struct city_buildings));
+		bkp->next = cb;
+	}
 	cb->building = b;
 	cb->next = NULL;
 }

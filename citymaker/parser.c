@@ -8,6 +8,7 @@
 #include "map.h"
 #include "structs.h"
 #include "residentials.h"
+#include "fb.h"
 
 #define INSTR_SIZE 5
 
@@ -22,8 +23,10 @@ void i_residential(struct city* the_city,char *l){
 	sscanf((&l[INSTR_SIZE+1]),"%hu,%hu,%hu,%hu",&x,&y,&s,&c);
 	printf("Found %hu,%hu,%hu,%hu\n",x,y,s,c);
 	struct city_buildings* a_b = the_city->all_buildings;
+	struct city_buildings* old = the_city->all_buildings;
 	struct building *b = init_residential(x,y,s,c,0,0);
-	//append_building(the_city, b);
+	append_building(the_city, b);
+	put_on_map(b, the_city->the_map,x,y,s);
 	printf("Created a residential building @(%d,%d) with size %d\n", x,y,s);
 }
 void i_commercial(struct city* the_city, char *l){
@@ -67,5 +70,9 @@ void parse_cm_file(char* filename)
 	while(fgets(buff,80,fd)!=NULL){
 		decode_line(the_city,buff);		
 	}
+	//Render on framebuffer (must be on console mode)
+	struct fbdev* fb = init_fb();
+	draw_city(fb,the_city);
+	
 	close(fd);
 }

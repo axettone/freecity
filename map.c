@@ -46,8 +46,8 @@ struct map* init_map(unsigned short width,unsigned short height){
  * of the map and there's no enough space, MAP_POS_OCC is returned. If 
  * everything was ok, MAP_POS_OK is returned.
  */
-int put_on_map(struct map_item* item,struct map* the_map,short x,short y,
-		short side_size){
+int put_on_map(struct map_item* item,struct map* the_map,unsigned short x,
+		unsigned short y, unsigned short side_size){
   int found=0,ii,jj;
   if(x+side_size >= the_map->width || y+side_size >= the_map->height){
     //map overflow

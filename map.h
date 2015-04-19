@@ -21,5 +21,6 @@ struct map{
 };
 
 struct map* init_map(unsigned short width, unsigned short height);
-int put_on_map(struct map_item* item,struct map* the_map,short x,short y,short side_size);
+int put_on_map(struct map_item* item,struct map* the_map,unsigned short x,
+		unsigned short y,unsigned short side_size);
 #endif
