@@ -12,12 +12,12 @@
 
 //Please, make some benchmarks using inline function
 void gather_residential_taxes(struct residential* r,struct tax_gather* g){
-	if(r->wealth < 35){
-		g->low_res+=r->occupied*r->wealth;
-	} else if(r->wealth < 75) {
-		g->mid_res+=r->occupied*r->wealth;
+	if(r->model->wealth < 35){
+		g->low_res+=r->occupied*r->model->wealth;
+	} else if(r->model->wealth < 75) {
+		g->mid_res+=r->occupied*r->model->wealth;
 	} else {
-		g->high_res+=r->occupied*r->wealth;
+		g->high_res+=r->occupied*r->model->wealth;
 	}
 }
 void gather_commercial_taxes(struct commercial* c, struct tax_gather*g){

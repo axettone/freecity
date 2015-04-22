@@ -22,7 +22,7 @@ void clear_fb(struct fbdev* fb)
 	ptr = fb->fbmem;
 
 	memset(ptr,0,fb->finfo.line_length*fb->vinfo.yres);
-	printf(">>>%d\n", fb->info);
+	printf(">>>%d\n", fb->vinfo);
 	/*
 	 * DEBUGGING STUFF	
 	printf("xres:yres:depth=%d:%d:%d\n",fb->vinfo.xres,fb->vinfo.yres,fb->vinfo.bits_per_pixel);

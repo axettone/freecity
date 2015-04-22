@@ -1,0 +1,5 @@
+Citymaker is a small tool that replaces a GUI for building cities. It uses a 
+very simple text format (and it uses a naive, super-simple parser) to build a
+city.
+I've made it because I need something quick&dirty capable of building cities
+to debug the program.

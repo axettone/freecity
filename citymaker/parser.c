@@ -19,15 +19,15 @@
  */
 void i_residential(struct city* the_city,char *l){
 	printf("Analyzing %s\n",l);
-	unsigned short x,y,s,c;
-	sscanf((&l[INSTR_SIZE+1]),"%hu,%hu,%hu,%hu",&x,&y,&s,&c);
-	printf("Found %hu,%hu,%hu,%hu\n",x,y,s,c);
+	unsigned short x,y;
+	unsigned int model_id;
+	sscanf((&l[INSTR_SIZE+1]),"%hu,%hu,%d",&x,&y,&model_id);
 	struct city_buildings* a_b = the_city->all_buildings;
 	struct city_buildings* old = the_city->all_buildings;
-	struct building *b = init_residential(x,y,s,c,0,0);
+	struct res_model* a_model = NULL; //Load with model_id from db
+	struct building *b = init_residential(x,y,a_model);
 	append_building(the_city, b);
-	put_on_map(b, the_city->the_map,x,y,s);
-	printf("Created a residential building @(%d,%d) with size %d\n", x,y,s);
+	put_on_map(b, the_city->the_map,x,y,a_model->side_size);
 }
 void i_commercial(struct city* the_city, char *l){
 }

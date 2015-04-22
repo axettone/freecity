@@ -62,15 +62,15 @@ int main(int argc, char** argv){
 	init_tax_sys(); //this is crap
 	struct city_buildings *all_buildings; //wow 
 	//POSITION demo;
-	
+	struct mod_res* a_model = NULL;
 	//Let's create a pair of residential building
 	all_buildings = (struct city_buildings*)
 		xmalloc(sizeof(struct city_buildings));
 
-	all_buildings->building = init_residential(10,10,3,10,6,50);
+	all_buildings->building = init_residential(10,10,a_model);
 	all_buildings->next = (struct city_buildings*)
 		xmalloc(sizeof(struct city_buildings));
-	all_buildings->next->building = init_residential(20,20,3,50,24,30);
+	all_buildings->next->building = init_residential(20,20,a_model);
 	//List termination
 	all_buildings->next->next = NULL;
 

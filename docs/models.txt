@@ -1,0 +1,3 @@
+Under models/ directory you can find a small, quick & dirty tool that handles
+a database of prototypes for buildings. Here you can define residentials, 
+commercial and industrial buildings and their characteristics.

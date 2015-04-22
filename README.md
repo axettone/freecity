@@ -17,6 +17,10 @@ I'd like to create a good city simulator, not only as a game. The program should
 
 For now the simulator is in a beginning stage. I'm working on the basic structures, data types and other basic stuff.
 
+## Additional documentation
+
+Take a look ad the docs folder. Feel free to contact me via email.
+
 ## Citymaker
 
 Citymaker (you can find it in the citymaker subdirectory) is my tool for generating "debug" cities. It will also display the city map (for debugging purposes only) on the linux framebuffer.

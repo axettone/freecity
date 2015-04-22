@@ -32,16 +32,16 @@ struct prod_requisites{
 	unsigned short education;
 	unsigned short pollution;
 };
-
 //Models
 struct res_model
 {
 	unsigned int id;
-	char name[80];
+	char name[81];
 	unsigned short capacity;
 	unsigned short wealth;
 	void *graphics; //unused
-}
+	unsigned short side_size;
+};
 struct com_model
 {
 	unsigned int id;
@@ -50,7 +50,8 @@ struct com_model
 	unsigned short wealth_grade;
 	unsigned short power_req;
 	void *graphics; //unused
-}
+	unsigned short side_size;
+};
 struct ind_model
 {
 	unsigned int id;
@@ -61,7 +62,8 @@ struct ind_model
 	unsigned short power_req;
 	unsigned short pollution;
 	void *graphics;//unused
-}
+	unsigned short side_size;
+};
 struct residential{
 	//struct building bldng;
 	struct res_model* model;
