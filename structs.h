@@ -25,30 +25,59 @@ struct building {
 	unsigned short x,y;
 	unsigned short side_size;
 	unsigned short type;
-	void* item;
+	void* item; //Points to a residential,commercial or industrial struct
 };
 
 struct prod_requisites{
 	unsigned short education;
 	unsigned short pollution;
 };
+
+//Models
+struct res_model
+{
+	unsigned int id;
+	char name[80];
+	unsigned short capacity;
+	unsigned short wealth;
+	void *graphics; //unused
+}
+struct com_model
+{
+	unsigned int id;
+	char name[80];
+	unsigned short capacity;
+	unsigned short wealth_grade;
+	unsigned short power_req;
+	void *graphics; //unused
+}
+struct ind_model
+{
+	unsigned int id;
+	char name[80];
+	unsigned short capacity;
+	unsigned short tech_grade;
+	unsigned short wealth_grade;
+	unsigned short power_req;
+	unsigned short pollution;
+	void *graphics;//unused
+}
 struct residential{
 	//struct building bldng;
-	unsigned short capacity;
+	struct res_model* model;
 	unsigned short occupied;
-	unsigned short wealth;
 	unsigned short happiness;
 };
 
 struct commercial{	//struct building bldng;
-	unsigned short jobs;
-	unsigned short grade;
+	struct com_model* model;
+	unsigned short employees;
 };
 
 struct industrial{
 	//struct building bldng;
-	unsigned short jobs;
-	unsigned short grade;
+	struct ind_model* model;
+	unsigned short employees;
 };
 
 struct city_buildings {

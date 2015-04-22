@@ -22,6 +22,7 @@ void clear_fb(struct fbdev* fb)
 	ptr = fb->fbmem;
 
 	memset(ptr,0,fb->finfo.line_length*fb->vinfo.yres);
+	printf(">>>%d\n", fb->info);
 	/*
 	 * DEBUGGING STUFF	
 	printf("xres:yres:depth=%d:%d:%d\n",fb->vinfo.xres,fb->vinfo.yres,fb->vinfo.bits_per_pixel);
@@ -62,9 +63,6 @@ struct fbdev* init_fb()
 		abort();
 	}
 	fb->screensize = fb->vinfo.xres*fb->vinfo.yres*fb->vinfo.bits_per_pixel/8;
-	/*fb->h = FB_HEIGHT;
-	fb->w = FB_WIDTH;
-	fb->d = BYTES_PER_PIXEL;*/
 	fb->fbmem = (struct px*)mmap(NULL,fb->finfo.smem_len,PROT_READ|PROT_WRITE,
 				MAP_SHARED,fd,0);
 	close(fd);
@@ -74,17 +72,10 @@ struct fbdev* init_fb()
 void draw_square(struct fbdev* fb, unsigned short o_x,unsigned short o_y, 
 		unsigned short size){
 	int ii;	
-	//printf("Will draw@(%d,%d)\n",o_x,o_y);
-	//printf("Coords translated to: %d,%d\n",o_x*FB_SCALE,o_y*FB_SCALE);
 	for(ii=o_y*FB_SCALE;ii<(o_y+size)*FB_SCALE;ii++){
 		memset(fb->fbmem+ii*fb->finfo.line_length+o_x*FB_SCALE,
 				200,4*size*FB_SCALE);
 
-		//printf("Writing %d pixels from line %d from %d to %d\n",
-		//		FB_SCALE*size,
-		//		ii+o_y,
-		//		o_x*FB_SCALE,
-		//		(o_x+size)*FB_SCALE);
 	}	
 }
 void draw_building(struct fbdev*fb, struct building* b)
@@ -92,17 +83,14 @@ void draw_building(struct fbdev*fb, struct building* b)
 	draw_square(fb, b->x, b->y, b->side_size);
 }
 void draw_city(struct fbdev* dev,struct city* the_city){
-	int ii=0;
 	hide_cursor();
 	struct city_buildings* a_b = the_city->all_buildings;
 	while(a_b!=NULL){
 		struct building *b = a_b->building;
 		draw_building(dev, b);
 		a_b = a_b->next;
-		ii++;
 	}
 	int t;
 	scanf("%d",&t);
-	printf("Disegnati %d elementi\n", ii);
 	show_cursor();
 }
