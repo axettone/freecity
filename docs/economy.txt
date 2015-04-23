@@ -1,0 +1,68 @@
+Economy model (draft)
+
+I'm not an economist, and I'd like to receive feedbacks and contributions from
+people who are competent. In the meantime, this is the draft of my economic
+model, that the simulator uses to track attractiveness of the city.
+
+# Segments of population/jobs
+This is a classic approach: low, medium and high levels of wealth are used to
+distinguish tax rates and behaviours.
+Wealth
+
+LOW	MEDIUM	HIGH
+0-40	40-75	75-100
+
+Maximum tolerable tax rate is 60%, minimum is 0%.
+
+Rich people want to work in high wealth companies, so you get the point.
+
+People choose to live in your city if tax rate is ok, and there's the right
+place to live in.
+
+This is the main formula, applied for each residential building.
+
+TAX_RATE
+The tax rate for this segment (e.g. medium wealth)
+
+MAX_TAX_RATE (=60)
+Self explained
+
+AVAILABLE_HOMES
+How many homes are available in this building
+
+AVAILABLE_JOBS
+How many jobs in the same segment are available
+
+ACTIVE_JOBS
+Total count of people having a job in this segment
+
+TOTAL_JOBS
+Available jobs+Active jobs
+
+CHOOSINESS
+%of compatible jobs refused by people
+
+DISTANCE
+Medium distance from the building to the AVAILABLE_JOBS.
+
+MAX_DISTANCE (=100)
+Maximum distance people want to travel for commuting.
+I have several doubts on this.
+
+LAND_VALUE
+The land value of the building. Too low or to high is not a good deal.
+
+Each parameter has a weight, that can be different for any segment. In the
+following formula I'm using fixed weight, but they will probably change in
+the future, e.g. CHOOSINESS should be higher for high-wealth people, and lower
+for low-wealth people.
+
+The formula is this:
+
+0.30*((MAX_TAX_RATE-TAX_RATE)/MAX_TAX_RATE)
++
+0.50*CHOOSINESS*(AVAILABLE_JOBS/TOTAL_JOBS)
++
+0.10*DISTANCE/MAX_DISTANCE
++
+0.10*(50-ABS(50-LAND_VALUE)) //ABS = absolute value
