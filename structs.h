@@ -20,11 +20,15 @@ typedef struct geo_pos{
   int x,y,z;
 } POSITION __attribute__ ((deprecated));
 
-
+struct coords_s{
+	unsigned short x;
+	unsigned short y;
+};
 struct building {
-	unsigned short x,y;
+	struct coords_s origin;
 	unsigned short side_size;
 	unsigned short type;
+	struct power_grid* p_grid;
 	void* item; //Points to a residential,commercial or industrial struct
 };
 

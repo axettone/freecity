@@ -69,18 +69,18 @@ struct fbdev* init_fb()
 	clear_fb(fb);
 	return fb;
 }
-void draw_square(struct fbdev* fb, unsigned short o_x,unsigned short o_y, 
+void draw_square(struct fbdev* fb, struct coords_s origin, 
 		unsigned short size){
 	int ii;	
-	for(ii=o_y*FB_SCALE;ii<(o_y+size)*FB_SCALE;ii++){
-		memset(fb->fbmem+ii*fb->finfo.line_length+o_x*FB_SCALE,
+	for(ii=origin.y*FB_SCALE;ii<(origin.y+size)*FB_SCALE;ii++){
+		memset(fb->fbmem+ii*fb->finfo.line_length+origin.x*FB_SCALE,
 				200,4*size*FB_SCALE);
 
 	}	
 }
 void draw_building(struct fbdev*fb, struct building* b)
 {
-	draw_square(fb, b->x, b->y, b->side_size);
+	draw_square(fb, b->origin, b->side_size);
 }
 void draw_city(struct fbdev* dev,struct city* the_city){
 	hide_cursor();

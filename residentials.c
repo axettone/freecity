@@ -8,11 +8,9 @@
 #include <string.h>
 #include "structs.h"
 #include "residentials.h"
-struct building* init_residential(unsigned short x,unsigned short y,
-		struct res_model* model){
+struct building* init_residential(struct coords_s coords,struct res_model* model){
   struct building* ret = (struct building*)xmalloc(sizeof(struct building));
-  ret->x=x;
-  ret->y=y;
+  ret->origin = coords;
   ret->type = BLD_RESIDENTIAL;
   ret->item = (struct residential*)xmalloc(sizeof(struct residential));
   struct residential* r = (struct residential*)ret->item;

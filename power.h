@@ -12,7 +12,8 @@
 #define PP_PLANCK 8 //String theory
 
 struct power_grid{
-	struct powerplant* power_plants;
+  unsigned int id;
+  struct powerplant* power_plants;
 };
 struct powerplant {
 	unsigned short jobs;

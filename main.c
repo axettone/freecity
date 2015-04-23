@@ -67,10 +67,10 @@ int main(int argc, char** argv){
 	all_buildings = (struct city_buildings*)
 		xmalloc(sizeof(struct city_buildings));
 
-	all_buildings->building = init_residential(10,10,a_model);
+	all_buildings->building = init_residential(C_XY(10,10),a_model);
 	all_buildings->next = (struct city_buildings*)
 		xmalloc(sizeof(struct city_buildings));
-	all_buildings->next->building = init_residential(20,20,a_model);
+	all_buildings->next->building = init_residential(C_XY(20,20),a_model);
 	//List termination
 	all_buildings->next->next = NULL;
 
@@ -93,10 +93,10 @@ int main(int argc, char** argv){
 
   sch1.item = &schools[0];
   sch2.item = &schools[1];
-  if(put_on_map(&sch1,the_city.the_map,50,50,3)==MAP_POS_OCC){
+  if(put_on_map(&sch1,the_city.the_map,m_coords(50,50),3)==MAP_POS_OCC){
     printf("I can't put that school here, map is occupied\n");
   }
-  if(put_on_map(&sch2,the_city.the_map,50,53,3) == MAP_POS_OCC){
+  if(put_on_map(&sch2,the_city.the_map,m_coords(60,60),3) == MAP_POS_OCC){
     printf("I can't put that school here, map is occupied\n");
   }
   strncpy(schools[0].school.name,"Enrico Fermi",80);

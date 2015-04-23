@@ -8,24 +8,14 @@
 #include <string.h>
 #include <errno.h>
 
-//#define RES_MODELS_FILE "/home/axettone/Desktop/freecity/models/resid.bin"
 #define RES_MODELS_FILE "resid.bin"
-int open_model_file(const char* file)
-{
-	int fd = open(file,O_RDWR);
-	if(fd<0)
-		abort();
-	return fd;
-}
+#define COM_MODELS_FILE "comm.bin"
+#define IND_MODELS_FILE "indus.bin"
+#define GOV_MODELS_FILE "govern.bin"
 
-void close_model_file(int fd)
-{
-	//Probably the most unuseful function in the world
-	close(fd);
-}
 void list_models()
 {
-	int fd = open_model_file(RES_MODELS_FILE);
+	int fd = open(RES_MODELS_FILE,O_RDONLY);
 	struct res_model_list* root=NULL;
 	struct res_model_list* cur=NULL;
 	struct res_model_list* last=NULL;
@@ -49,7 +39,7 @@ void list_models()
 		}
 
 	}
-	close_model_file(fd);
+	close(fd);
 
 	//debug
 	cur = root;
@@ -59,17 +49,33 @@ void list_models()
 	}
 }
 
-void insert_res_model(struct res_model model)
+void insert_raw_model(int fd,void* data,size_t len)
 {
-	int fd = open(RES_MODELS_FILE,O_APPEND|O_CREAT|O_WRONLY,0777);
 	if(fd<0){
-		printf("Error opening file\n");
+		printf("Error opening file: %d\n",errno);
 		abort();
 	}
-	ssize_t written = write(fd,&model,sizeof(struct res_model));
-	if(written<=0){
+	if(write(fd,data,len)<=0){
 		printf("Error %d writing on file\n", errno);
 		abort();
 	}
-	close_model_file(fd);
 }
+void insert_res_model(struct res_model model)
+{
+	int fd = open(RES_MODELS_FILE,O_APPEND|O_CREAT|O_WRONLY,0777);
+	insert_raw_model(fd,&model,sizeof(struct res_model));
+	close(fd);
+}
+void insert_com_model(struct com_model model)
+{
+	int fd = open(COM_MODELS_FILE,O_APPEND|O_CREAT|O_WRONLY,0777);
+	insert_raw_model(fd,&model,sizeof(struct com_model));
+	close(fd);
+}
+void insert_ind_model(struct ind_model model)
+{
+	int fd = open(IND_MODELS_FILE,O_APPEND|O_CREAT|O_WRONLY,0777);
+	insert_raw_model(fd,&model,sizeof(struct ind_model));
+	close(fd);
+}
+

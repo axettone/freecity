@@ -25,9 +25,9 @@ void i_residential(struct city* the_city,char *l){
 	struct city_buildings* a_b = the_city->all_buildings;
 	struct city_buildings* old = the_city->all_buildings;
 	struct res_model* a_model = NULL; //Load with model_id from db
-	struct building *b = init_residential(x,y,a_model);
+	struct building *b = init_residential(C_XY(x,y),a_model);
 	append_building(the_city, b);
-	put_on_map(b, the_city->the_map,x,y,a_model->side_size);
+	put_on_map(b, the_city->the_map,C_XY(x,y),a_model->side_size);
 }
 void i_commercial(struct city* the_city, char *l){
 }

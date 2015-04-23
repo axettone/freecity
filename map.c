@@ -46,26 +46,31 @@ struct map* init_map(unsigned short width,unsigned short height){
  * of the map and there's no enough space, MAP_POS_OCC is returned. If 
  * everything was ok, MAP_POS_OK is returned.
  */
-int put_on_map(struct map_item* item,struct map* the_map,unsigned short x,
-		unsigned short y, unsigned short side_size){
+int put_on_map(struct map_item* item,struct map* the_map,struct coords_s coords,
+		unsigned short side_size){
   int found=0,ii,jj;
-  if(x+side_size >= the_map->width || y+side_size >= the_map->height){
+  if(coords.x+side_size >= the_map->width || coords.y+side_size >= the_map->height){
     //map overflow
     return MAP_POS_OFL;
   }
   
-  for(ii=y;ii<y+side_size;ii++){
-    for(jj=x;jj<x+side_size;jj++){
+  for(ii=coords.y;ii<coords.y+side_size;ii++){
+    for(jj=coords.x;jj<coords.x+side_size;jj++){
       if(the_map->items[ii*the_map->width+jj]!=NULL)
         return MAP_POS_OCC;
     }
   }
-  for(ii=y;ii<y+side_size;ii++){
-    for(jj=x;jj<x+side_size;jj++){
+  for(ii=coords.y;ii<coords.y+side_size;ii++){
+    for(jj=coords.x;jj<coords.x+side_size;jj++){
       the_map->items[ii*the_map->width+jj] = item;
     }
   }
   
   return MAP_POS_OK; 
 }
-
+inline struct coords_s m_coords(unsigned short x, unsigned short y){
+	struct coords_s ret;
+	ret.x = x;
+	ret.y = y;
+	return ret;
+}
