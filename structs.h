@@ -2,10 +2,11 @@
 #define STRUCTS_H
 #include <inttypes.h>
 #include <time.h>
-#define I_SCHOOL 1
-#define I_POLICE 2
-#define I_RESIDENTIAL 3
-#define I_INDUSTRIAL 4
+#define I_SCHOOL 5
+#define I_POLICE 4
+#define I_RESIDENTIAL 1
+#define I_INDUSTRIAL 3
+#define I_COMMERCIAL 2
 
 //building types
 #define BLD_RESIDENTIAL 1

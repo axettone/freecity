@@ -14,7 +14,7 @@ struct city{
 	struct economy_status *e_status;
 	time_t now_time;
 };
-struct city* init_city(const char*, unsigned short,const char*);
+struct city* init_city(const char* city_name, unsigned short map_size,const char* filename);
 void append_building(struct city*,struct building*);
 unsigned int count_buildings(struct city_buildings* buildings);
 #endif

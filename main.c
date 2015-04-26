@@ -25,6 +25,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <unistd.h>
+#include <fcntl.h>
 #include "structs.h"
 #include "city.h"
 #include "residentials.h"
@@ -36,13 +38,84 @@
 #include "map.h"
 #include "xmalloc.h"
 #include "power.h"
-
+#include "modeldbf.h"
 #define DEBUG 1
+
 
 struct attractiveness attractiveness;
 
+void eval_building(struct city* the_city,struct building *bld)
+{
+	unsigned int MAX_TAX_RATE = 60;
+	unsigned int TAX_RATE = 30;
+	unsigned int ACTIVE_JOBS = 2000;
+	unsigned int AVAILABLE_JOBS = 20;
+	unsigned int TOTAL_JOBS = ACTIVE_JOBS+AVAILABLE_JOBS;
+	float CHOOSINESS = 0.30;
+	unsigned int DISTANCE = 50;
+	unsigned int MAX_DISTANCE = 100;
+	unsigned short LAND_VALUE = 50;
+	printf("Evaluating building\n");
+	struct residential* r = (struct residential*)bld->item;
+	float attract = 0.30*((MAX_TAX_RATE-TAX_RATE)/MAX_TAX_RATE)
+		+ 0.50*CHOOSINESS*(AVAILABLE_JOBS/TOTAL_JOBS)
+		+ 0.10*DISTANCE/MAX_DISTANCE
+		+ 0.10*(50-abs(50-LAND_VALUE));
+
+	r->occupied += (short)attract*(r->model->capacity - r->occupied);
+	printf("VAL: %g\n", attract);
+	printf("Occupied: %u\n", r->occupied);
+	
+	
+}
+
+void sim_loop_a(struct city* the_city){
+	unsigned int loop = 0;
+
+	while(1){
+		printf("Loop %u\n", loop);
+		struct city_buildings* all_buildings = 
+			the_city->all_buildings;
+		while(all_buildings != NULL){
+			//For each building
+			eval_building(the_city,
+					all_buildings->building);
+			all_buildings = all_buildings->next;
+		}
+		sleep(5);
+		loop++;
+	}
+}
+
 int main(int argc, char** argv){
 	struct city the_city;
+	struct city *ferrara =
+		init_city("Ferrara",500,"ferrara.fc");
+
+	struct res_model_list* r_models=NULL;
+	struct com_model_list* c_models=NULL;
+	struct ind_model_list* i_models=NULL;
+
+	init_models_lists(&r_models,&c_models,&i_models);
+
+	//Adding a pair of buildings
+	struct building* b1;
+	struct building* b2;
+
+	struct res_model* a_model = get_resmodel_by_id(r_models,1);
+	if(a_model == NULL){
+		printf("Model not found\n");
+		abort();
+	}
+	b1 = init_residential(C_XY(0,0),a_model);
+	b2 = init_residential(C_XY(10,10),a_model);
+
+	append_building(ferrara,b1);
+	append_building(ferrara,b2);
+
+	sim_loop_a(ferrara);
+
+	//CODE CEMETERY
 	printf("City name: ");
 	fgets(the_city.name,CITY_NAME_MAXLEN,stdin);
 	printf("File name: ");
@@ -62,7 +135,7 @@ int main(int argc, char** argv){
 	init_tax_sys(); //this is crap
 	struct city_buildings *all_buildings; //wow 
 	//POSITION demo;
-	struct mod_res* a_model = NULL;
+	//struct mod_res* a_model = NULL;
 	//Let's create a pair of residential building
 	all_buildings = (struct city_buildings*)
 		xmalloc(sizeof(struct city_buildings));
@@ -131,9 +204,20 @@ int main(int argc, char** argv){
 
   school_overall_cost(schools);
 
+  unsigned int loop = 0;
+
+  while(1){
+	  printf("Loop %u\n", loop);
+
+	  sleep(1);
+  }
+
+
+  ////// CODE CEMETERY //////
+
   //Manual loop. This should be replaced one day
   //with a GUI and a thread
-
+/*
   while(1){
     int ch = menu();
     if(ch==MN_EXIT)
@@ -151,7 +235,7 @@ int main(int argc, char** argv){
       case MN_CRIME:
         menu_print_crime_data();
         break;
-	case MN_SAVE:
+      case MN_SAVE:
 	menu_save_city(&the_city);
 	break;
       default:
@@ -159,9 +243,13 @@ int main(int argc, char** argv){
         break;
     }
   }
+
+*/	
+/*
   return 0;
   while(1){
 	attractiveness_compute(&attractiveness);
+
 	people_migration();
 	check_power_grid();
 	evaluate_economy();
@@ -172,4 +260,5 @@ int main(int argc, char** argv){
 	advance_date();
   }
   return 0;
+  */
 }
