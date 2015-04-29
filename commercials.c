@@ -35,4 +35,13 @@ struct building* init_commercial(struct coords_s origin,
 	c->employees = 0;
 	return ret;
 }
-
+void eval_com_building(struct city* the_city,struct building *bld)
+{
+	struct economy_status* e = the_city->e_status;
+	unsigned int MAX_TAX_RATE = 60;
+	unsigned int TAX_RATE = 30;
+	struct commercial*c  = (struct commercial*)bld->item;
+	e->available_jobs += c->model->capacity;
+	e->active_jobs += c->employees;
+	
+}

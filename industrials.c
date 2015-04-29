@@ -20,18 +20,29 @@
  *
  * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  */
-#include "struts.h"
+#include "structs.h"
 #include "industrials.h"
 
 struct building* init_industrial(struct coords_s coords,
 		struct ind_model* model)
 {
-	struct building* ret (struct building*)xmalloc(sizeof(struct building));
-	ret->coords.x = x;ret->coords.y=y;
+	struct building* ret = (struct building*)xmalloc(sizeof(struct building));
+	ret->origin = coords;
 	ret->type=BLD_INDUSTRIAL;
-	ret->side_size = model->size_size;
+	ret->side_size = model->side_size;
 	ret->item = (struct industrial*)xmalloc(sizeof(struct industrial));
 	struct industrial* i = (struct industrial*)ret->item;
 	i->employees = 0;
 	return ret;
 }
+void eval_ind_building(struct city* the_city,struct building *bld)
+{
+	struct economy_status* e = the_city->e_status;
+	unsigned int MAX_TAX_RATE = 60;
+	unsigned int TAX_RATE = 30;
+	struct industrial* i = (struct industrial*)bld->item;
+	e->available_jobs += i->model->capacity;
+	e->active_jobs += i->employees;
+
+}
+

@@ -31,6 +31,8 @@
 #include "structs.h"
 #include "city.h"
 #include "residentials.h"
+#include "commercials.h"
+#include "industrials.h"
 #include "economy.h"
 #include "school.h"
 #include "matrixsys.h"
@@ -46,52 +48,6 @@
 
 
 struct attractiveness attractiveness;
-void eval_biz_building(struct city* the_city,struct building *bld)
-{
-	unsigned int MAX_TAX_RATE = 60;
-	unsigned int TAX_RATE = 30;
-	struct commercial* c;
-	struct industrial* i;
-	if(bld->type == BLD_COMMERCIAL)
-		c = (struct commercial*)bld->item;
-	else
-		i = (struct industrial*)bld->item;
-
-
-	printf("Evaluating building\n");
-	
-}
-void eval_res_building(struct city* the_city,struct building *bld)
-{
-	unsigned int MAX_TAX_RATE = 60;
-	unsigned int TAX_RATE = 30;
-	unsigned int ACTIVE_JOBS = 2000;
-	unsigned int AVAILABLE_JOBS = 20;
-	unsigned int TOTAL_JOBS = ACTIVE_JOBS+AVAILABLE_JOBS;
-	float CHOOSINESS = 0.30;
-	unsigned int DISTANCE = 50;
-	unsigned int MAX_DISTANCE = 100;
-	unsigned short LAND_VALUE = 50;
-	unsigned short MAX_LAND_VALUE = 100;
-	printf("Evaluating building\n");
-	struct residential* r = (struct residential*)bld->item;
-	float attract = 0.30*((MAX_TAX_RATE-TAX_RATE)/MAX_TAX_RATE)
-		+ 0.50*CHOOSINESS*(AVAILABLE_JOBS/TOTAL_JOBS)
-		+ 0.10*DISTANCE/MAX_DISTANCE
-		+ 0.10*(50-abs(50-LAND_VALUE))/MAX_LAND_VALUE;
-	attract=zero_to_one(attract*(RAND_MAX/2-rand())/RAND_MAX);
-
-	printf("Model capacity: %d, occupied: %d\n", r->model->capacity,
-						r->occupied);
-	short diff = attract*(r->model->capacity - r->occupied);
-	r->occupied += diff;
-	ACTIVE_JOBS += diff;
-	AVAILABLE_JOBS -= diff;
-	printf("VAL: %g\n", attract);
-	printf("Occupied: %d\n", r->occupied);
-	
-	
-}
 
 void sim_loop_a(struct city* the_city){
 	unsigned int loop = 0;
@@ -99,20 +55,25 @@ void sim_loop_a(struct city* the_city){
 	loop_w.tv_sec = 0;
 	loop_w.tv_nsec = 500000000;
 	struct city_buildings* all_buildings;
+	struct economy_status* e = the_city->e_status;
+	init_tax_rates_default(&(e->tax_rates));
 	while(1){
 		printf("Loop %u\n", loop);
-
+		//Resetting stats
+		e->available_jobs=0;
+		e->active_jobs=0;
 		//TODO: Evaluating power and other services
 		//...
 
 		//Evaluating business buildings
 		all_buildings=the_city->all_buildings;
 		while(all_buildings != NULL){
-			if(all_buildings->building->type % BLD_BUSINESS == 0 )
-			{
-				eval_biz_building(the_city,
+			if(all_buildings->building->type == BLD_COMMERCIAL)
+				eval_com_building(the_city,
 						all_buildings->building);
-			}
+			else if(all_buildings->building->type == BLD_INDUSTRIAL)
+				eval_ind_building(the_city,
+						all_buildings->building);
 			all_buildings=all_buildings->next;
 		}
 
@@ -120,8 +81,11 @@ void sim_loop_a(struct city* the_city){
 		all_buildings = the_city->all_buildings;
 		while(all_buildings != NULL){
 			//For each building
-			eval_res_building(the_city,
+			if(all_buildings->building->type == BLD_RESIDENTIAL){
+				eval_res_building(the_city,
 					all_buildings->building);
+			}
+			
 			all_buildings = all_buildings->next;
 		}
 		nanosleep(&loop_w,&unuseful_w);
@@ -134,6 +98,9 @@ int main(int argc, char** argv){
 	struct city *ferrara =
 		init_city("Ferrara",500,"ferrara.fc");
 
+	ferrara->e_status->available_cash = 100000;
+	ferrara->e_status->available_jobs = 0;
+	ferrara->e_status->active_jobs = 0;
 	struct res_model_list* r_models=NULL;
 	struct com_model_list* c_models=NULL;
 	struct ind_model_list* i_models=NULL;
@@ -152,12 +119,15 @@ int main(int argc, char** argv){
 	b1 = init_residential(C_XY(0,0),a_model);
 	b2 = init_residential(C_XY(10,10),a_model);
 	b3 = init_commercial(C_XY(20,20),c_model);
+
+	//try to set wealth here
 	append_building(ferrara,b1);
 	append_building(ferrara,b2);
 	append_building(ferrara,b3);
 
 	sim_loop_a(ferrara);
 
+	return 0;
 	//CODE CEMETERY
 	printf("City name: ");
 	fgets(the_city.name,CITY_NAME_MAXLEN,stdin);

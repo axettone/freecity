@@ -102,18 +102,20 @@ struct residential{
 	//struct building bldng;
 	struct res_model* model;
 	unsigned short occupied;
-	unsigned short happiness;
+	unsigned short wealth;
 };
 
 struct commercial{	//struct building bldng;
 	struct com_model* model;
 	unsigned short employees;
+	unsigned short wealth;
 };
 
 struct industrial{
 	//struct building bldng;
 	struct ind_model* model;
 	unsigned short employees;
+	unsigned short wealth;
 };
 
 struct city_buildings {
@@ -170,17 +172,20 @@ struct map_item{
   void *item;
 };
 
-struct economy_status {
-  long available_cash;
-  int happiness;
-
-};
-
-struct {
+struct tax_rates{
   float low_res,mid_res,high_res;
   float low_com,mid_com,high_com;
   float low_ind,mid_ind,high_ind;
-} tax_sys;
+};
+
+struct economy_status {
+  long available_cash;
+  int happiness;
+  unsigned int available_jobs;
+  unsigned int active_jobs;
+  struct tax_rates tax_rates;
+
+};
 
 struct attractiveness{
   uint8_t low_res,mid_res,high_res;
