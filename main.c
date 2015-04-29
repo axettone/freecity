@@ -27,6 +27,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <time.h>
 #include "structs.h"
 #include "city.h"
 #include "residentials.h"
@@ -39,12 +40,28 @@
 #include "xmalloc.h"
 #include "power.h"
 #include "modeldbf.h"
+#include "utils.h"
+
 #define DEBUG 1
 
 
 struct attractiveness attractiveness;
+void eval_biz_building(struct city* the_city,struct building *bld)
+{
+	unsigned int MAX_TAX_RATE = 60;
+	unsigned int TAX_RATE = 30;
+	struct commercial* c;
+	struct industrial* i;
+	if(bld->type == BLD_COMMERCIAL)
+		c = (struct commercial*)bld->item;
+	else
+		i = (struct industrial*)bld->item;
 
-void eval_building(struct city* the_city,struct building *bld)
+
+	printf("Evaluating building\n");
+	
+}
+void eval_res_building(struct city* the_city,struct building *bld)
 {
 	unsigned int MAX_TAX_RATE = 60;
 	unsigned int TAX_RATE = 30;
@@ -55,34 +72,59 @@ void eval_building(struct city* the_city,struct building *bld)
 	unsigned int DISTANCE = 50;
 	unsigned int MAX_DISTANCE = 100;
 	unsigned short LAND_VALUE = 50;
+	unsigned short MAX_LAND_VALUE = 100;
 	printf("Evaluating building\n");
 	struct residential* r = (struct residential*)bld->item;
 	float attract = 0.30*((MAX_TAX_RATE-TAX_RATE)/MAX_TAX_RATE)
 		+ 0.50*CHOOSINESS*(AVAILABLE_JOBS/TOTAL_JOBS)
 		+ 0.10*DISTANCE/MAX_DISTANCE
-		+ 0.10*(50-abs(50-LAND_VALUE));
+		+ 0.10*(50-abs(50-LAND_VALUE))/MAX_LAND_VALUE;
+	attract=zero_to_one(attract*(RAND_MAX/2-rand())/RAND_MAX);
 
-	r->occupied += (short)attract*(r->model->capacity - r->occupied);
+	printf("Model capacity: %d, occupied: %d\n", r->model->capacity,
+						r->occupied);
+	short diff = attract*(r->model->capacity - r->occupied);
+	r->occupied += diff;
+	ACTIVE_JOBS += diff;
+	AVAILABLE_JOBS -= diff;
 	printf("VAL: %g\n", attract);
-	printf("Occupied: %u\n", r->occupied);
+	printf("Occupied: %d\n", r->occupied);
 	
 	
 }
 
 void sim_loop_a(struct city* the_city){
 	unsigned int loop = 0;
-
+	struct timespec loop_w,unuseful_w;
+	loop_w.tv_sec = 0;
+	loop_w.tv_nsec = 500000000;
+	struct city_buildings* all_buildings;
 	while(1){
 		printf("Loop %u\n", loop);
-		struct city_buildings* all_buildings = 
-			the_city->all_buildings;
+
+		//TODO: Evaluating power and other services
+		//...
+
+		//Evaluating business buildings
+		all_buildings=the_city->all_buildings;
+		while(all_buildings != NULL){
+			if(all_buildings->building->type % BLD_BUSINESS == 0 )
+			{
+				eval_biz_building(the_city,
+						all_buildings->building);
+			}
+			all_buildings=all_buildings->next;
+		}
+
+		//Evaluating residential buildings
+		all_buildings = the_city->all_buildings;
 		while(all_buildings != NULL){
 			//For each building
-			eval_building(the_city,
+			eval_res_building(the_city,
 					all_buildings->building);
 			all_buildings = all_buildings->next;
 		}
-		sleep(5);
+		nanosleep(&loop_w,&unuseful_w);
 		loop++;
 	}
 }
@@ -98,20 +140,21 @@ int main(int argc, char** argv){
 
 	init_models_lists(&r_models,&c_models,&i_models);
 
-	//Adding a pair of buildings
-	struct building* b1;
-	struct building* b2;
+	//Adding some buildings
+	struct building* b1,*b2,*b3;
 
 	struct res_model* a_model = get_resmodel_by_id(r_models,1);
+	struct com_model* c_model = get_commodel_by_id(c_models,100);
 	if(a_model == NULL){
 		printf("Model not found\n");
 		abort();
 	}
 	b1 = init_residential(C_XY(0,0),a_model);
 	b2 = init_residential(C_XY(10,10),a_model);
-
+	b3 = init_commercial(C_XY(20,20),c_model);
 	append_building(ferrara,b1);
 	append_building(ferrara,b2);
+	append_building(ferrara,b3);
 
 	sim_loop_a(ferrara);
 

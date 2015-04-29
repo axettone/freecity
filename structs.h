@@ -1,18 +1,47 @@
+/*
+ * structs.h - This file contains almost all the structures and constants
+ * used by freecity.
+ *
+ * Some notes:
+ *
+ * BLD_COMMERCIAL and BLD_INDUSTRIAL should be multiples of BLD_BUSINESS
+ *
+ * Copyright (C) 2015 Paolo Niccolò Giubelli <paoloniccolo.giubelli@gmail.com>
+ *
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or (at
+ *  your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful, but
+ *  WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License along
+ *  with this program; if not, write to the Free Software Foundation, Inc.,
+ *  59 Temple Place, Suite 330, Boston, MA 02111-1307 USA.
+ *
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ */
 #ifndef STRUCTS_H
 #define STRUCTS_H
 #include <inttypes.h>
 #include <time.h>
 #define I_SCHOOL 5
-#define I_POLICE 4
+#define I_POLICE 4i
 #define I_RESIDENTIAL 1
-#define I_INDUSTRIAL 3
-#define I_COMMERCIAL 2
+#define I_INDUSTRIAL 14
+#define I_COMMERCIAL 21
 
 //building types
 #define BLD_RESIDENTIAL 1
-#define BLD_COMMERCIAL 2
-#define BLD_INDUSTRIAL 3
+#define BLD_COMMERCIAL 21
+#define BLD_INDUSTRIAL 14
 #define BLD_GOVERNATIVE 4
+#define BLD_BUSINESS 7
 
 #define I_FIRE 5
 #define I_STREET 6

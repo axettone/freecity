@@ -229,9 +229,51 @@ void delete_res_model(struct res_model*	model)
 }
 void delete_com_model(struct com_model *model)
 {
-	
+	struct com_model_list *the_list;
+	struct com_model_list *start;
+	struct com_model_list *prev;
+
+	prev=the_list;
+	start=the_list;
+
+	while(the_list != NULL)
+	{
+		if(the_list->model.id == model->id){
+			prev->next = the_list->next;
+			break;
+		}
+		prev=the_list;
+		the_list=the_list->next;
+	}
+
+	int fd = open("com_tmp_file.bin",O_WRONLY|O_CREAT,0777);
+	write_list_to_file_commodel(fd,start);
+	close(fd);
+	remove(COM_MODELS_FILE);
+	rename("com_tmp_file.bin",COM_MODELS_FILE);
 }
 void delete_ind_model(struct ind_model *model)
 {
+	struct ind_model_list *the_list;
+	struct ind_model_list *start;
+	struct ind_model_list *prev;
 
+	prev=the_list;
+	start=the_list;
+
+	while(the_list != NULL)
+	{
+		if(the_list->model.id == model->id){
+			prev->next = the_list->next;
+			break;
+		}
+		prev=the_list;
+		the_list=the_list->next;
+	}
+
+	int fd = open("ind_tmp_file.bin",O_WRONLY|O_CREAT,0777);
+	write_list_to_file_commodel(fd,start);
+	close(fd);
+	remove(IND_MODELS_FILE);
+	rename("ind_tmp_file.bin",IND_MODELS_FILE);
 }
