@@ -77,6 +77,18 @@ int main(int argc, char** argv)
 				break;	
 			case 3:
 				//Do something
+				printf("Name (79 chars max): ");
+				scanf("%s", i_model.name);
+				printf("How man many people can work here: ");
+				scanf("%hu", &(i_model.capacity));
+				printf("Wealth level [0-100]: ");
+				scanf("%hu", &(i_model.wealth_grade));
+				printf("Power required [0-100]: ");
+				scanf("%hu",&(i_model.power_req));
+				printf("Side size on map: ");
+				scanf("%hu",&(i_model.side_size));
+				insert_ind_model(i_model);
+
 				break;
 			
 			case 4:

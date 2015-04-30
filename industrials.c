@@ -32,6 +32,7 @@ struct building* init_industrial(struct coords_s coords,
 	ret->side_size = model->side_size;
 	ret->item = (struct industrial*)xmalloc(sizeof(struct industrial));
 	struct industrial* i = (struct industrial*)ret->item;
+	i->model = model;
 	i->employees = 0;
 	return ret;
 }

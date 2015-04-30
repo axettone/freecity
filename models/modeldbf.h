@@ -1,9 +1,9 @@
 #ifndef MODELDBF_H
 #include "structs.h"
-#define RES_MODELS_FILE "models/resid.bin"
-#define COM_MODELS_FILE "models/comm.bin"
-#define IND_MODELS_FILE "models/indus.bin"
-#define GOV_MODELS_FILE "models/govern.bin"
+#define RES_MODELS_FILE "resid.bin"
+#define COM_MODELS_FILE "comm.bin"
+#define IND_MODELS_FILE "indus.bin"
+#define GOV_MODELS_FILE "govern.bin"
 struct res_model_list
 {
 	struct res_model model;

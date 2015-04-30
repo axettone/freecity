@@ -67,6 +67,7 @@ void sim_loop_a(struct city* the_city){
 
 		//Evaluating business buildings
 		all_buildings=the_city->all_buildings;
+		int ii=0;
 		while(all_buildings != NULL){
 			if(all_buildings->building->type == BLD_COMMERCIAL)
 				eval_com_building(the_city,
@@ -75,6 +76,7 @@ void sim_loop_a(struct city* the_city){
 				eval_ind_building(the_city,
 						all_buildings->building);
 			all_buildings=all_buildings->next;
+			ii++;
 		}
 
 		//Evaluating residential buildings
@@ -89,11 +91,14 @@ void sim_loop_a(struct city* the_city){
 			all_buildings = all_buildings->next;
 		}
 		nanosleep(&loop_w,&unuseful_w);
+		printf("Available jobs: %d\n", the_city->e_status->available_jobs);
+		printf("Active jobs: %d\n", the_city->e_status->active_jobs);
 		loop++;
 	}
 }
 
 int main(int argc, char** argv){
+	int ii,jj,ran;
 	struct city the_city;
 	struct city *ferrara =
 		init_city("Ferrara",500,"ferrara.fc");
@@ -111,7 +116,33 @@ int main(int argc, char** argv){
 	struct building* b1,*b2,*b3;
 
 	struct res_model* a_model = get_resmodel_by_id(r_models,1);
-	struct com_model* c_model = get_commodel_by_id(c_models,100);
+	struct com_model* c_model = get_commodel_by_id(c_models,1);
+	struct ind_model* i_model = get_indmodel_by_id(i_models,1);
+
+	if(a_model == NULL || c_model == NULL || i_model == NULL){
+		abort();
+	}
+
+	//Generate 10,000 buildings
+	for(ii=0;ii<10000;){
+		ran = rand();
+		b1=NULL;
+		if(ran%2 == 0){
+			b1 = init_residential(C_XY(0,0), a_model);
+
+		} else if (ran %3==0) {
+			b1 = init_commercial(C_XY(0,0), c_model);
+
+		} else if (ran %5==0) {
+			b1 = init_industrial(C_XY(0,0), i_model);
+		}
+		if(b1!=NULL){
+			append_building(ferrara,b1);
+			ii++;
+		}
+	}
+	printf("Appended %d new buildings in the city\n",ii);
+	/*
 	if(a_model == NULL){
 		printf("Model not found\n");
 		abort();
@@ -124,7 +155,7 @@ int main(int argc, char** argv){
 	append_building(ferrara,b1);
 	append_building(ferrara,b2);
 	append_building(ferrara,b3);
-
+	*/
 	sim_loop_a(ferrara);
 
 	return 0;
@@ -136,7 +167,6 @@ int main(int argc, char** argv){
 	
 	printf("Ok the city name is %s and it will be saved in %s\n",
 			the_city.name,the_city.filename);
-	int ii,jj;
   
 	struct school_l *schools;
 	struct map *the_map = init_map(100,100);  
