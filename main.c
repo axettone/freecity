@@ -43,12 +43,22 @@
 #include "power.h"
 #include "modeldbf.h"
 #include "utils.h"
+#include <signal.h>
 
 #define DEBUG 1
 
+int killed;
 
 struct attractiveness attractiveness;
+void log_csv(int fd, struct economy_status* e)
+{
+	char buff[80];
+	sprintf(buff,"%ld,%u,%u\n",e->available_cash,
+				e->available_jobs,
+				e->active_jobs);
+	write(fd,buff,strlen(buff));
 
+}
 void sim_loop_a(struct city* the_city){
 	unsigned int loop = 0;
 	struct timespec loop_w,unuseful_w;
@@ -57,7 +67,11 @@ void sim_loop_a(struct city* the_city){
 	struct city_buildings* all_buildings;
 	struct economy_status* e = the_city->e_status;
 	init_tax_rates_default(&(e->tax_rates));
-	while(1){
+	unlink("output.csv");
+	int fd = open("output.csv",O_WRONLY|O_CREAT|O_SYNC,0777);
+	char *csv_head = "AVAIL_CASH,AVAIL_JOBS,ACTIVE_JOBS\n";
+	write(fd,csv_head,strlen(csv_head));
+	while(killed == 0){
 		printf("Loop %u\n", loop);
 		//Resetting stats
 		e->available_jobs=0;
@@ -79,6 +93,9 @@ void sim_loop_a(struct city* the_city){
 			ii++;
 		}
 
+		printf("Available jobs: %d\n", the_city->e_status->available_jobs);
+		printf("Active jobs: %d\n", the_city->e_status->active_jobs);
+
 		//Evaluating residential buildings
 		all_buildings = the_city->all_buildings;
 		while(all_buildings != NULL){
@@ -90,17 +107,29 @@ void sim_loop_a(struct city* the_city){
 			
 			all_buildings = all_buildings->next;
 		}
+		log_csv(fd,the_city->e_status);
 		nanosleep(&loop_w,&unuseful_w);
 		printf("Available jobs: %d\n", the_city->e_status->available_jobs);
 		printf("Active jobs: %d\n", the_city->e_status->active_jobs);
+		printf("Population: %ld\n", 
+				count_population(the_city->all_buildings));
 		loop++;
 	}
+	close(fd);
+}
+
+void terminate(int signal)
+{
+	printf("Terminating...\n");
+	killed=1;
 }
 /**
  * At this time, main() is actually a workbench, where I test functions and
  * features.
  **/
 int main(int argc, char** argv){
+	killed = 0;
+	signal(SIGINT, &terminate);
 	int ii,jj,ran;
 	struct city the_city;
 	struct city *ferrara =

@@ -7,5 +7,6 @@ struct building* init_residential(struct coords_s coords,
 
 long count_population(struct city_buildings* buildings);
 void eval_res_building(struct city* the_city,struct building *bld);
+struct building* find_closest_job_and_assign(struct city*,struct building*);
 void people_migration();
 #endif
