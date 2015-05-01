@@ -96,7 +96,10 @@ void sim_loop_a(struct city* the_city){
 		loop++;
 	}
 }
-
+/**
+ * At this time, main() is actually a workbench, where I test functions and
+ * features.
+ **/
 int main(int argc, char** argv){
 	int ii,jj,ran;
 	struct city the_city;
@@ -141,7 +144,16 @@ int main(int argc, char** argv){
 			ii++;
 		}
 	}
-	printf("Appended %d new buildings in the city\n",ii);
+
+	//Remove 100 random buildings
+	//(just debuggin deatch_building)
+	for(;ii>9900;ii--){
+		unsigned int r_el = pos_rand(0,ii-1);
+		detach_building(ferrara, 
+				get_cbuilding_at(ferrara->all_buildings,r_el));	
+	}
+	printf("Appended %d new buildings in the city\n",
+			count_buildings(ferrara->all_buildings));
 	/*
 	if(a_model == NULL){
 		printf("Model not found\n");

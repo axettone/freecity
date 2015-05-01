@@ -16,5 +16,7 @@ struct city{
 };
 struct city* init_city(const char* city_name, unsigned short map_size,const char* filename);
 void append_building(struct city*,struct building*);
+void detach_building(struct city*,struct building*);
+struct city_buildings* get_cbuilding_at(struct city_buildings*, unsigned int);
 unsigned int count_buildings(struct city_buildings* buildings);
 #endif

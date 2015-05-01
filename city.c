@@ -66,6 +66,37 @@ void append_building(struct city* c, struct building* b)
 	cb->building = b;
 	cb->next = NULL;
 }
+void detach_building(struct city* c,struct building* b)
+{
+	struct city_buildings* cb = c->all_buildings;
+	struct city_buildings* bkp=cb;
+	while(cb != NULL){
+		if(c->all_buildings == cb){
+			//Want to remove the first element
+			c->all_buildings = c->all_buildings->next;
+			return;
+		}
+		if(cb->building==b){
+			bkp->next = cb->next;
+			xfree(b);
+			return;
+		}
+		bkp=cb;
+		cb=cb->next;
+	}
+}
+struct city_buildings* get_cbuilding_at(struct city_buildings* buildings, 
+		unsigned int index){
+	unsigned int ii = 0;
+	while(buildings != NULL)
+	{
+		if(ii==index)
+			return buildings;
+		buildings = buildings->next;
+		ii++;
+	}
+	abort();
+}
 unsigned int count_buildings(struct city_buildings* buildings){
 	unsigned int ret = 0;
 	while(buildings != NULL){

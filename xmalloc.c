@@ -32,3 +32,8 @@ void* xmalloc(size_t size){
 		abort();
 	return ret;
 }
+
+void xfree(void* ptr)
+{
+	free(ptr);
+}
